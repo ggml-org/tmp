@@ -1,0 +1,20 @@
+name: Gatekeeper
+
+on:
+  workflow_call:
+
+jobs:
+  gatekeeper-auto:
+    if: github.ref_name == 'master'
+    runs-on: ubuntu-slim
+    steps:
+      - name: Auto-approve (master branch)
+        run: echo "Running on master branch - auto-approved"
+
+  gatekeeper-review:
+    if: github.ref_name != 'master'
+    runs-on: ubuntu-slim
+    environment: ci-manual
+    steps:
+      - name: Approved after review
+        run: echo "Non-master branch - approved after manual review"
