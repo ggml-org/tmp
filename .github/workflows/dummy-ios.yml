@@ -35,7 +35,7 @@ jobs:
 
   ios-xcode:
     needs: [get-version]
-    runs-on: macos-26
+    runs-on: xcode-27-xlarge
 
     steps:
       - name: Checkout code
@@ -45,7 +45,7 @@ jobs:
 
       - name: Setup Xcode
         run: |
-          sudo xcode-select -s /Applications/Xcode_26.4.app
+          sudo xcode-select -s /Applications/Xcode_27.0.app
 
       - name: Build
         id: cmake_build
