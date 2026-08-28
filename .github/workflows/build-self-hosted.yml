@@ -68,7 +68,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y cmake build-essential libgomp1 git git-lfs libssl-dev wget jq python3 python3-venv python3-pip
+          sudo apt install -y cmake libgomp1 libssl-dev wget python3 python3-venv python3-pip
 
       - name: ccache
         uses: ggml-org/ccache-action@v1.2.21
@@ -84,6 +84,19 @@ jobs:
           key: self-hosted-gpu-cuda
           folder: llama.cpp
           hf_bucket: ggml-org/cache
+
+      - name: Diagnose /data permissions
+        run: |
+          id
+          stat -c '%A %a %U:%G %u:%g %n' /data
+          findmnt -T /data -o TARGET,SOURCE,FSTYPE,OPTIONS
+
+          set +e
+          touch /data/.runner-write-test
+          echo "runner write: $?"
+          sudo touch /data/.root-write-test
+          echo "root write: $?"
+          sudo rm -f /data/.runner-write-test /data/.root-write-test
 
       - name: Test
         id: ggml-ci
