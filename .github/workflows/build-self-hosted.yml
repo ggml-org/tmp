@@ -85,24 +85,11 @@ jobs:
           folder: llama.cpp
           hf_bucket: ggml-org/cache
 
-      - name: Diagnose /data permissions
-        run: |
-          id
-          stat -c '%A %a %U:%G %u:%g %n' /data
-          findmnt -T /data -o TARGET,SOURCE,FSTYPE,OPTIONS
-
-          set +e
-          touch /data/.runner-write-test
-          echo "runner write: $?"
-          sudo touch /data/.root-write-test
-          echo "root write: $?"
-          sudo rm -f /data/.runner-write-test /data/.root-write-test
-
       - name: Test
         id: ggml-ci
         run: |
           nvidia-smi
-          GG_BUILD_CUDA=1 bash ./ci/run.sh /data/results/llama.cpp /data/mnt/llama.cpp
+          GG_BUILD_CUDA=1 bash ./ci/run.sh ~/results/llama.cpp ~/mnt/llama.cpp
 
       - name: ccache-buckets-save
         # if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
