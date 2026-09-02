@@ -42,7 +42,7 @@ concurrency:
 
 jobs:
   server-cuda:
-    runs-on: hf-jobs-t4-small
+    runs-on: "hf-jobs-t4-small:cuda13"
 
     steps:
       - name: Clone
