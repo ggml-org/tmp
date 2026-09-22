@@ -46,7 +46,7 @@ env:
 jobs:
   gpu-vulkan-amd:
     runs-on: ggml-hfc-amd-r9700-2gpu-use1-hybrid-80
-    container: ubuntu-26.04
+    container: "ubuntu:26.04"
 
     steps:
       - name: Clone
