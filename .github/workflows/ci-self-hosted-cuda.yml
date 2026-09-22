@@ -57,6 +57,7 @@ jobs:
         run: |
           apt update
           apt install -y build-essential git git-lfs cmake libssl-dev time unzip wget python3 python3-venv python3-pip
+          ldconfig
 
       - name: ccache
         uses: ggml-org/ccache-action@v1.2.24
