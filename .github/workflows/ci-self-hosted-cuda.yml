@@ -44,8 +44,9 @@ env:
   LLAMA_ARG_LOG_TIMESTAMPS: 1
 
 jobs:
-  gpu-cuda:
-    runs-on: "hf-jobs-t4-small:cuda13"
+  amd-rocm:
+    runs-on: ggml-hfc-amd-r9700-1gpu-use1-hybrid-80
+    container: "rocm/dev-ubuntu-26.04:10.0.0-full"
 
     steps:
       - name: Clone
@@ -54,8 +55,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt update
-          sudo apt install -y cmake libssl-dev time unzip wget python3 python3-venv python3-pip
+          apt update
+          apt install -y build-essential git git-lfs cmake libssl-dev time unzip wget python3 python3-venv python3-pip
 
       - name: ccache
         uses: ggml-org/ccache-action@v1.2.24
@@ -63,62 +64,8 @@ jobs:
           restore: false
           save: false
 
-      - name: ccache-buckets-restore
-        uses: ./.github/actions/ccache-buckets
-        with:
-          key: self-hosted-gpu-cuda
-          folder: llama.cpp
-          hf_bucket: ggml-org/cache
-
       - name: Test
         id: ggml-ci
         run: |
-          nvidia-smi
-          GG_BUILD_CUDA=1 CUDACXX=/usr/local/cuda/bin/nvcc bash ./ci/run.sh ~/results/llama.cpp ~/mnt/llama.cpp
-
-      - name: ccache-buckets-save
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
-        uses: ./.github/actions/ccache-buckets
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN_CACHE_OUTPUT }}
-        with:
-          key: self-hosted-gpu-cuda
-          folder: llama.cpp
-          evict-old-files: 1d
-          hf_bucket: ggml-org/cache
-          save: true
-
-  gpu-rocm:
-    runs-on: [self-hosted, Linux, AMD]
-
-    steps:
-      - name: Clone
-        id: checkout
-        uses: actions/checkout@v6
-
-      - name: Test
-        id: ggml-ci
-        # HIP_LAUNCH_BLOCKING=1: workaround for an async-execution correctness
-        # issue on integrated RDNA3.5 (gfx1151) where batched inference returns
-        # incorrect output (perplexity ~88 vs ~9.4). Serializing kernel launches
-        # restores correctness. Remove once the underlying ROCm/HIP issue is fixed.
-        env:
-          HIP_LAUNCH_BLOCKING: "1"
-        run: |
-          rocminfo
-          GG_BUILD_ROCM=1 GG_BUILD_AMDGPU_TARGETS=gfx1151 bash ./ci/run.sh ~/results/llama.cpp ~/mnt/llama.cpp
-
-  # TODO: provision AMD GPU machine
-  # amd-rocm:
-  #   runs-on: [self-hosted, Linux, AMD]
-
-  #   steps:
-  #     - name: Clone
-  #       id: checkout
-  #       uses: actions/checkout@v6
-
-  #     - name: Test
-  #       id: ggml-ci
-  #       run: |
-  #         amd-smi static
-  #         GG_BUILD_ROCM=1 GG_BUILD_AMDGPU_TARGETS="gfx1101" bash ./ci/run.sh ~/results/llama.cpp ~/mnt/llama.cpp
+          amd-smi static
+          GG_BUILD_ROCM=1 GG_BUILD_AMDGPU_TARGETS="gfx1201" bash ./ci/run.sh ~/results/llama.cpp ~/mnt/llama.cpp
