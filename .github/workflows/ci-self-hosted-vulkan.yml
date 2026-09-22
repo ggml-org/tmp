@@ -48,6 +48,10 @@ jobs:
     runs-on: ggml-hfc-amd-r9700-2gpu-use1-hybrid-80
     container: "ubuntu:26.04"
 
+    defaults:
+      run:
+        shell: bash
+
     steps:
       - name: Clone
         id: checkout
