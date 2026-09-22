@@ -48,10 +48,6 @@ jobs:
     runs-on: ggml-hfc-amd-r9700-2gpu-use1-hybrid-80
     container: "ubuntu:26.04"
 
-    defaults:
-      run:
-        shell: bash
-
     steps:
       - name: Clone
         id: checkout
@@ -59,8 +55,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt update
-          sudo apt install -y build-essential cmake libxcb-xinput0 libxcb-xinerama0 libxcb-cursor-dev libvulkan-dev glslc spirv-headers vulkan-tools mesa-vulkan-drivers libglvnd0 libgl1 libglx0 libegl1 libgles2 libssl-dev time unzip wget python3 python3-venv python3-pip
+          apt update
+          apt install -y build-essential cmake libxcb-xinput0 libxcb-xinerama0 libxcb-cursor-dev libvulkan-dev glslc spirv-headers vulkan-tools mesa-vulkan-drivers libglvnd0 libgl1 libglx0 libegl1 libgles2 libssl-dev time unzip wget python3 python3-venv python3-pip
 
       - name: ccache
         uses: ggml-org/ccache-action@v1.2.24
