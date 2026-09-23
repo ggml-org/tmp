@@ -45,7 +45,7 @@ env:
 
 jobs:
   amd-rocm:
-    runs-on: ggml-hfc-amd-r9700-1gpu-use1-hybrid-80
+    runs-on: [self-hosted, Linux, gfx1201]
     container: "rocm/dev-ubuntu-26.04:10.0.0-full"
 
     steps:
@@ -67,6 +67,5 @@ jobs:
       - name: Test
         id: ggml-ci
         run: |
-          export LD_LIBRARY_PATH=/opt/rocm/core-10.0.0/lib:$LD_LIBRARY_PATH
           amd-smi static
-          GG_BUILD_ROCM=1 GG_BUILD_AMDGPU_TARGETS="gfx1201" bash ./ci/run.sh ~/results/llama.cpp ~/mnt/llama.cpp
+          GG_BUILD_ROCM=1 GG_BUILD_AMDGPU_TARGETS="gfx1201" LD_LIBRARY_PATH=/opt/rocm/core-10.0.0/lib:$LD_LIBRARY_PATH bash ./ci/run.sh ~/results/llama.cpp ~/mnt/llama.cpp
