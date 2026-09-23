@@ -46,7 +46,7 @@ env:
 jobs:
   amd-rocm:
     runs-on: [self-hosted, Linux, gfx1201]
-    container: "rocm/dev-ubuntu-26.04:10.0.0-full"
+    container: "rocm/dev-ubuntu-24.04:7.2.4-complete"
 
     steps:
       - name: Clone
@@ -68,4 +68,4 @@ jobs:
         id: ggml-ci
         run: |
           amd-smi static
-          GG_BUILD_ROCM=1 GG_BUILD_AMDGPU_TARGETS="gfx1201" LD_LIBRARY_PATH=/opt/rocm/core-10.0.0/lib:$LD_LIBRARY_PATH bash ./ci/run.sh ~/results/llama.cpp ~/mnt/llama.cpp
+          GG_BUILD_ROCM=1 GG_BUILD_AMDGPU_TARGETS="gfx1201" bash ./ci/run.sh ~/results/llama.cpp ~/mnt/llama.cpp
