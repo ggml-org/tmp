@@ -57,7 +57,6 @@ jobs:
         run: |
           apt update
           apt install -y build-essential git git-lfs cmake libssl-dev time unzip wget python3 python3-venv python3-pip
-          find /opt/rocm -name "libhipblas.so*"
 
       - name: ccache
         uses: ggml-org/ccache-action@v1.2.24
@@ -68,5 +67,6 @@ jobs:
       - name: Test
         id: ggml-ci
         run: |
+          export LD_LIBRARY_PATH=/opt/rocm/core-10.0.0/lib:$LD_LIBRARY_PATH
           amd-smi static
           GG_BUILD_ROCM=1 GG_BUILD_AMDGPU_TARGETS="gfx1201" bash ./ci/run.sh ~/results/llama.cpp ~/mnt/llama.cpp
