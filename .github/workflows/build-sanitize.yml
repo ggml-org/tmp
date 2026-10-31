@@ -45,9 +45,9 @@ jobs:
         include:
         # thread and address doesn't run properly on some self hosted machines, so run it on Github instead
         - sanitizer: ADDRESS
-          machine: ubuntu-24.04
+          machine: ubuntu-26.04
         - sanitizer: THREAD
-          machine: ubuntu-24.04
+          machine: ubuntu-26.04
         - sanitizer: UNDEFINED
           machine: [self-hosted, X64, Linux, CPU]
 
