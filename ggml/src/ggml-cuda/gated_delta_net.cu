@@ -116,7 +116,7 @@ gated_delta_net_cuda(const float * q,
                 attn_partial += s_shard[r] * q_reg[r];
             }
 
-            float attn_col = warp_reduce_sum<lanes_per_col>(attn_partial);
+            float attn_col = warp_reduce_sum<lanes_per_col, true>(attn_partial);
 
             if (lane_in_col == 0) {
                 attn_data[col] = attn_col * scale;
@@ -145,7 +145,7 @@ gated_delta_net_cuda(const float * q,
                 attn_partial += s_shard[r] * q_reg[r];
             }
 
-            float attn_col = warp_reduce_sum<lanes_per_col>(attn_partial);
+            float attn_col = warp_reduce_sum<lanes_per_col, true>(attn_partial);
 
             if (lane_in_col == 0) {
                 attn_data[col] = attn_col * scale;
