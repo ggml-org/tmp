@@ -13,7 +13,7 @@ from typing import cast
 import yaml
 
 try:
-    from itanium_demangler import parse as demangle  # ty: ignore[import-not-found]
+    from itanium_demangler import parse as demangle  # ty: ignore[unresolved-import]
 except ImportError:
     demangle = None
 

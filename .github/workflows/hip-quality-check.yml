@@ -115,7 +115,7 @@ jobs:
             -DCMAKE_HIP_FLAGS="-Werror -Wno-tautological-compare" \
             -DCMAKE_BUILD_TYPE=Release
           cd build
-          make -j $(nproc)
+          make -j $(nproc) ggml-hip
 
       - name: Build HIP kernel resource metrics
         id: vgpr_check
